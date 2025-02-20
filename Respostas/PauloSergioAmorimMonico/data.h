@@ -4,6 +4,8 @@ typedef struct data Data;
 
 Data *data_criar(int dia, int mes, int ano);
 
+Data *data_ler();
+
 void data_print(Data *data);
 
 int data_e_valida(Data *data);
