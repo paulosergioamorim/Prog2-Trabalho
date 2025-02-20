@@ -88,10 +88,10 @@ int data_anos_diferenca(Data *dataInicio, Data *dataFim)
 {
     int years = dataFim->ano - dataInicio->ano;
 
-    if (dataFim->mes > dataInicio->mes)
+    if (dataFim->mes < dataInicio->mes)
         years--;
 
-    if (dataFim->mes == dataInicio->mes && dataFim->mes > dataInicio->mes)
+    if (dataFim->mes == dataInicio->mes && dataFim->dia < dataInicio->dia)
         years--;
 
     return years;
