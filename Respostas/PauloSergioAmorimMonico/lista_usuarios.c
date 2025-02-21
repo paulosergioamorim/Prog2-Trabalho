@@ -36,7 +36,7 @@ ListaUsuarios *lista_usuarios_adicionar(ListaUsuarios *listaUsuarios, Usuario *u
     return listaUsuarios;
 }
 
-void *lista_usuarios_free(ListaUsuarios *listaUsuarios)
+void lista_usuarios_free(ListaUsuarios *listaUsuarios)
 {
     for (int i = 0; i < listaUsuarios->count; i++)
         usuario_free(listaUsuarios->usuarios[i]);

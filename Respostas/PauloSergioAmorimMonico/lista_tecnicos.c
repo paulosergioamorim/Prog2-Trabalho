@@ -1,7 +1,7 @@
 #include "lista_tecnicos.h"
-#include <stdlib.h>
-#include <stdio.h>
 #include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 struct lista_tecnicos
 {
@@ -10,7 +10,8 @@ struct lista_tecnicos
     int count;
 };
 
-ListaTecnicos *lista_tecnicos_criar() {
+ListaTecnicos *lista_tecnicos_criar()
+{
     ListaTecnicos *pListaTecnicos = malloc(sizeof(struct lista_tecnicos));
     assert(pListaTecnicos);
 
@@ -21,7 +22,8 @@ ListaTecnicos *lista_tecnicos_criar() {
     return pListaTecnicos;
 }
 
-ListaTecnicos *lista_tecnicos_adicionar(ListaTecnicos *listaTecnicos, Tecnico *tecnico) {
+ListaTecnicos *lista_tecnicos_adicionar(ListaTecnicos *listaTecnicos, Tecnico *tecnico)
+{
     if (listaTecnicos->count + 2 == listaTecnicos->memSize)
     {
         listaTecnicos->memSize *= 2;
@@ -34,7 +36,8 @@ ListaTecnicos *lista_tecnicos_adicionar(ListaTecnicos *listaTecnicos, Tecnico *t
     return listaTecnicos;
 }
 
-void *lista_tecnicos_free(ListaTecnicos *listaTecnicos) {
+void lista_tecnicos_free(ListaTecnicos *listaTecnicos)
+{
     for (int i = 0; i < listaTecnicos->count; i++)
         tecnico_free(listaTecnicos->tecnicos[i]);
 
@@ -42,7 +45,8 @@ void *lista_tecnicos_free(ListaTecnicos *listaTecnicos) {
     free(listaTecnicos);
 }
 
-void lista_tecnicos_print(ListaTecnicos *listaTecnicos) {
+void lista_tecnicos_print(ListaTecnicos *listaTecnicos)
+{
     printf("----- BANCO DE TECNICOS -----\n");
 
     for (int i = 0; i < listaTecnicos->count; i++)
@@ -50,6 +54,6 @@ void lista_tecnicos_print(ListaTecnicos *listaTecnicos) {
         printf("--------------------\n");
         tecnico_print(listaTecnicos->tecnicos[i]);
     }
-    
+
     printf("----------------------------\n\n");
 }
