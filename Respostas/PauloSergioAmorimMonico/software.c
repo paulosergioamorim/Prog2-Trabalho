@@ -24,16 +24,16 @@ struct Software
  */
 Software *criaSoftware(char *nome, char *categoria, int impacto, char *motivo)
 {
-    Software *pSoftware = malloc(sizeof(struct Software));
-    assert(pSoftware);
+    Software *software = malloc(sizeof(struct Software));
+    assert(software);
 
-    strcpy(pSoftware->nome, nome);
-    strcpy(pSoftware->categoria, categoria);
-    pSoftware->impacto = impacto;
-    strcpy(pSoftware->motivo, motivo);
-    pSoftware->tempoEstimado = 0;
+    strcpy(software->nome, nome);
+    strcpy(software->categoria, categoria);
+    software->impacto = impacto;
+    strcpy(software->motivo, motivo);
+    software->tempoEstimado = 0;
 
-    return pSoftware;
+    return software;
 }
 
 /**
@@ -62,6 +62,16 @@ Software *lerSoftware()
  */
 void setTempoEstimadoSoftware(Software *s)
 {
+    if (strcmp(s->categoria, "BUG") == 0)
+        s->tempoEstimado = TEMPO_ESTIMADO_BUG;
+
+    if (strcmp(s->categoria, "OUTROS") == 0)
+        s->tempoEstimado = TEMPO_ESTIMADO_OUTROS;
+
+    if (strcmp(s->categoria, "DUVIDA") == 0)
+        s->tempoEstimado = TEMPO_ESTIMADO_DUVIDA;
+
+    s->tempoEstimado += s->impacto;
 }
 
 /**
@@ -72,20 +82,9 @@ void setTempoEstimadoSoftware(Software *s)
 int getTempoEstimadoSoftware(void *dado)
 {
     Software *software = (Software *)dado;
-    int tempoEstimado = 0;
+    setTempoEstimadoSoftware(software);
 
-    if (strcmp(software->categoria, "BUG") == 0)
-        tempoEstimado += TEMPO_ESTIMADO_BUG;
-
-    if (strcmp(software->categoria, "OUTROS") == 0)
-        tempoEstimado += TEMPO_ESTIMADO_OUTROS;
-
-    if (strcmp(software->categoria, "DUVIDA") == 0)
-        tempoEstimado += TEMPO_ESTIMADO_DUVIDA;
-
-    tempoEstimado += software->impacto;
-
-    return tempoEstimado;
+    return software->tempoEstimado;
 }
 
 /**
@@ -119,12 +118,12 @@ void notificaSoftware(void *dado)
 - Nível do impacto: 2
 - Motivo: NAO CONSIGO ORDENAR COLUNA DE DADOS
     */
-    Software *software = (Software *) dado;
+    Software *software = (Software *)dado;
 
     printf("- Tipo: Software\n");
     printf("- Nome do software: %s\n", software->nome);
     printf("- Categoria: %s\n", software->categoria);
     printf("- Nível do impacto: %d\n", software->impacto);
     printf("- Motivo: %s\n", software->motivo);
-    printf("- Tempo estimado: %dh\n", getTempoEstimadoSoftware(software));
+    printf("- Tempo estimado: %dh\n", software->tempoEstimado);
 }

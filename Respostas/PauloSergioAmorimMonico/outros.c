@@ -11,6 +11,7 @@ struct Outros
     char descricao[OUTROS_DESCRICAO];
     char local[OUTROS_LOCAL];
     int nivelDificuldade;
+    int tempoEstimado;
 };
 
 Outros *criaOutros(char *descricao, char *local, int nivelDificuldade)
@@ -20,6 +21,7 @@ Outros *criaOutros(char *descricao, char *local, int nivelDificuldade)
     strcpy(outros->descricao, descricao);
     strcpy(outros->local, local);
     outros->nivelDificuldade = nivelDificuldade;
+    outros->tempoEstimado = 0;
 
     return outros;
 }
@@ -51,8 +53,9 @@ PASSARELA DE ENTRADA (local)
  * Tempo estimado depende da categoria e impacto
  * @param s  Ticket do tipo Outros
  */
-void setTempoEstimadoOutros(Outros *s)
+void setTempoEstimadoOutros(Outros *outros)
 {
+    outros->tempoEstimado = outros->nivelDificuldade;
 }
 
 /**
@@ -63,8 +66,9 @@ void setTempoEstimadoOutros(Outros *s)
 int getTempoEstimadoOutros(void *dado)
 {
     Outros *outros = (Outros *)dado;
+    setTempoEstimadoOutros(outros);
 
-    return outros->nivelDificuldade;
+    return outros->tempoEstimado;
 }
 
 /**
@@ -97,5 +101,5 @@ void notificaOutros(void *dado)
     printf("- Descricao: %s\n", outros->descricao);
     printf("- Local: %s\n", outros->local);
     printf("- Nivel de Dificuldade: %d\n", outros->nivelDificuldade);
-    printf("- Tempo Estimado: %dh\n", getTempoEstimadoOutros(outros));
+    printf("- Tempo Estimado: %dh\n", outros->tempoEstimado);
 }

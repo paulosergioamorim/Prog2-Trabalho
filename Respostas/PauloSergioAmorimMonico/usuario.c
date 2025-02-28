@@ -107,7 +107,13 @@ int qsort_compara_usuarios(const void *p1, const void *p2)
     Usuario *u1 = *(Usuario **)p1;
     Usuario *u2 = *(Usuario **)p2;
 
-    return u2->ticketsSolicitados >= u1->ticketsSolicitados;
+    if (u2->ticketsSolicitados > u1->ticketsSolicitados)
+        return 1;
+
+    if (strcmp(u2->nome, u1->nome) == -1)
+        return 1;
+
+    return 0;
 }
 
 Data *usuario_recupera_data(Usuario *usuario) {

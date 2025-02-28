@@ -140,7 +140,13 @@ int qsort_compara_tecnicos(const void * p1, const void * p2) {
     Tecnico * t1 = *(Tecnico **) p1;
     Tecnico * t2 = *(Tecnico **) p2;
 
-    return t2->tempoTrabalhado >= t1->tempoTrabalhado;
+    if (t2->tempoTrabalhado > t1->tempoTrabalhado)
+        return 1;
+
+    if (strcmp(t2->nome, t1->nome) == -1)
+        return 1;
+
+    return 0;
 }
 
 int tecnico_recupera_tempo_trabalhado(Tecnico *tecnico) {

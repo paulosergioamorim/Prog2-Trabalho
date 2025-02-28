@@ -13,6 +13,7 @@ struct Manutencao
     char estado[MAX_TAM_NOME_MANUTENCAO];
     char local[MAX_TAM_LOCAL_MANUTENCAO];
     char setor[TAM_SETOR_TRABALHO];
+    int tempoEstimado;
 };
 
 Manutencao *criaManutencao(char *nome, char *estado, char *local)
@@ -23,6 +24,7 @@ Manutencao *criaManutencao(char *nome, char *estado, char *local)
     strcpy(manutencao->estado, estado);
     strcpy(manutencao->local, local);
     strcpy(manutencao->setor, "");
+    manutencao->tempoEstimado = 0;
 
     return manutencao;
 }
@@ -49,8 +51,22 @@ Manutencao *lerManutencao()
  * Tempo estimado depende da categoria e impacto
  * @param s  Ticket do tipo Manutencao
  */
-void setTempoEstimadoManutencao(Manutencao *s)
+void setTempoEstimadoManutencao(Manutencao *manutencao)
 {
+    if (strcmp(manutencao->estado, "BOM") == 0)
+        manutencao->tempoEstimado = 1;
+
+    else if (strcmp(manutencao->estado, "REGULAR") == 0)
+        manutencao->tempoEstimado = 2;
+
+    else if (strcmp(manutencao->estado, "RUIM") == 0)
+        manutencao->tempoEstimado = 3;
+
+    if (strcmp(manutencao->setor, "RH") == 0)
+        manutencao->tempoEstimado *= 2;
+
+    else if (strcmp(manutencao->setor, "FINANCEIRO") == 0)
+        manutencao->tempoEstimado *= 3;
 }
 
 void setSetor(Manutencao *manutencao, char *setor)
@@ -66,24 +82,9 @@ void setSetor(Manutencao *manutencao, char *setor)
 int getTempoEstimadoManutencao(void *dado)
 {
     Manutencao *manutencao = (Manutencao *)dado;
-    int tempo = 0;
+    setTempoEstimadoManutencao(manutencao);
 
-    if (strcmp(manutencao->estado, "BOM") == 0)
-        tempo = 1;
-
-    else if (strcmp(manutencao->estado, "REGULAR") == 0)
-        tempo = 2;
-
-    else if (strcmp(manutencao->estado, "RUIM") == 0)
-        tempo = 3;
-
-    if (strcmp(manutencao->setor, "RH") == 0)
-        return tempo * 2;
-
-    else if (strcmp(manutencao->setor, "FINANCEIRO") == 0)
-        return tempo * 3;
-
-    return tempo;
+    return manutencao->tempoEstimado;
 }
 
 /**
@@ -109,7 +110,8 @@ void desalocaManutencao(void *s)
  * @brief  Imprime um ticket do tipo Manutencao
  * @param dado  Ticket do tipo Manutencao
  */
-void notificaManutencao(void *dado) {
+void notificaManutencao(void *dado)
+{
     /*
 - Tipo: Manutencao
 - Nome do item: PORTA DE ENTRADA
@@ -117,11 +119,11 @@ void notificaManutencao(void *dado) {
 - Local: SALA 22 CT-7
 - Tempo estimado: 6h
     */
-   Manutencao *manutencao = (Manutencao *)dado;
+    Manutencao *manutencao = (Manutencao *)dado;
 
-   printf("- Tipo: Manutencao\n");
-   printf("- Nome do item: %s\n", manutencao->nome);
-   printf("- Estado de conservacao: %s\n", manutencao->estado);
-   printf("- Local: %s\n", manutencao->local);
-   printf("- Tempo estimado: %dh\n", getTempoEstimadoManutencao(dado));
+    printf("- Tipo: Manutencao\n");
+    printf("- Nome do item: %s\n", manutencao->nome);
+    printf("- Estado de conservacao: %s\n", manutencao->estado);
+    printf("- Local: %s\n", manutencao->local);
+    printf("- Tempo estimado: %dh\n", manutencao->tempoEstimado);
 }
