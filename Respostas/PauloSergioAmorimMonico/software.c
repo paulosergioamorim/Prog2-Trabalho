@@ -108,6 +108,7 @@ char getTipoSoftware()
 void desalocaSoftware(void *s)
 {
     free(s);
+    s = NULL;
 }
 
 /**
@@ -124,8 +125,10 @@ void notificaSoftware(void *dado)
     */
     Software *software = (Software *) dado;
 
+    printf("- Tipo: Software\n");
     printf("- Nome do software: %s\n", software->nome);
     printf("- Categoria: %s\n", software->categoria);
     printf("- Nível do impacto: %d\n", software->impacto);
-    printf("- Motibo: %s\n", software->motivo);
+    printf("- Motivo: %s\n", software->motivo);
+    printf("- Tempo estimado: %dh\n", getTempoEstimadoSoftware(software));
 }

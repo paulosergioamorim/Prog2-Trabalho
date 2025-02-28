@@ -1,7 +1,7 @@
 #include "ticket.h"
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 #include <string.h>
 
 struct Ticket
@@ -50,19 +50,18 @@ Ticket *criaTicket(char *cpfSol, void *dado, func_ptr_tempoEstimado getTempo, fu
  * @param d Ticket inicializado
  * @param id ID a ser atribuido ao ticket
  */
-void setIDTicket(Ticket *d, char *id) {
+void setIDTicket(Ticket *d, char *id)
+{
     strcpy(d->id, id);
-    return d;
 }
 
 /**
  * @brief Finaliza um ticket
  * @param t Ticket inicializado
  */
-void finalizaTicket(Ticket *t) {
+void finalizaTicket(Ticket *t)
+{
     t->finalizado = 1;
-
-    return t;
 }
 
 /**
@@ -70,7 +69,8 @@ void finalizaTicket(Ticket *t) {
  * @param t Ticket inicializado
  * @return CPF de quem solicitou a abertura do ticket
  */
-char *getCPFSolicitanteTicket(Ticket *t) {
+char *getCPFSolicitanteTicket(Ticket *t)
+{
     return t->cpfSol;
 }
 
@@ -79,7 +79,8 @@ char *getCPFSolicitanteTicket(Ticket *t) {
  * @param t Ticket inicializado
  * @return tempo estimado para resolver um ticket
  */
-int getTempoEstimadoTicket(Ticket *t) {
+int getTempoEstimadoTicket(Ticket *t)
+{
     return t->getTempo(t->dado);
 }
 
@@ -88,7 +89,8 @@ int getTempoEstimadoTicket(Ticket *t) {
  * @param t Ticket inicializado
  * @return tipo do Ticket
  */
-char getTipoTicket(Ticket *t) {
+char getTipoTicket(Ticket *t)
+{
     return t->getTipo();
 }
 
@@ -97,10 +99,11 @@ char getTipoTicket(Ticket *t) {
  * @param t Ticket inicializado
  * @return status do Ticket
  */
-char getStatusTicket(Ticket *t) {
+char getStatusTicket(Ticket *t)
+{
     if (t->finalizado)
         return 'F';
-    
+
     return 'A';
 }
 
@@ -108,7 +111,8 @@ char getStatusTicket(Ticket *t) {
  * @brief  Desaloca um ticket da memória
  * @param doc estrutura do tipo Ticket que deve ser liberada da memória
  */
-void desalocaTicket(Ticket *doc) {
+void desalocaTicket(Ticket *doc)
+{
     doc->desaloca(doc->dado);
     free(doc);
 }
@@ -117,6 +121,18 @@ void desalocaTicket(Ticket *doc) {
  * @brief  Notifica (imprime) um ticket
  * @param doc Ticket a ser notificado
  */
-void notificaTicket(Ticket *doc) {
+void notificaTicket(Ticket *doc)
+{
+    printf("---------TICKET-----------\n");
+    printf("- ID: %s\n", doc->id);
+    printf("- Usuario solicitante: %s\n", doc->cpfSol);
     doc->notifica(doc->dado);
+
+    if (getStatusTicket(doc) == 'F')
+        printf("- Status: Finalizado\n");
+
+    else
+        printf("- Status: Andamento\n");
+
+    printf("-------------------------\n\n");
 }
