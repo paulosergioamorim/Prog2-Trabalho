@@ -1,5 +1,5 @@
 gcc: *.c
-	gcc -o prog *.c -g
+	gcc -o prog *.c -g -Wall
 
 gdb:
 	gdb prog

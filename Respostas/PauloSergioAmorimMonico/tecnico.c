@@ -1,4 +1,6 @@
 #include "tecnico.h"
+#include "ticket.h"
+#include "constantes.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,20 +22,20 @@ struct tecnico
 Tecnico *tecnico_criar(char *nome, char *cpf, Data *data, char *genero, char *telefone, char *areaAtuacao,
                        float salario, int disponibilidadeTempo)
 {
-    Tecnico *pTecnico = malloc(sizeof(struct tecnico));
-    assert(pTecnico);
+    Tecnico *tecnico = malloc(sizeof(Tecnico));
+    assert(tecnico);
 
-    strcpy(pTecnico->nome, nome);
-    strcpy(pTecnico->cpf, cpf);
-    pTecnico->data = data;
-    strcpy(pTecnico->telefone, telefone);
-    strcpy(pTecnico->genero, genero);
-    strcpy(pTecnico->areaAtuacao, areaAtuacao);
-    pTecnico->salario = salario;
-    pTecnico->disponibilidadeTempo = disponibilidadeTempo;
-    pTecnico->tempoTrabalhado = 0;
+    strcpy(tecnico->nome, nome);
+    strcpy(tecnico->cpf, cpf);
+    tecnico->data = data;
+    strcpy(tecnico->telefone, telefone);
+    strcpy(tecnico->genero, genero);
+    strcpy(tecnico->areaAtuacao, areaAtuacao);
+    tecnico->salario = salario;
+    tecnico->disponibilidadeTempo = disponibilidadeTempo;
+    tecnico->tempoTrabalhado = 0;
 
-    return pTecnico;
+    return tecnico;
 }
 
 /*
@@ -103,4 +105,48 @@ void tecnico_free(Tecnico *tecnico)
 {
     data_free(tecnico->data);
     free(tecnico);
+}
+
+int tecnico_recupera_disponibilidade(Tecnico *tecnico) {
+    return tecnico->disponibilidadeTempo;
+}
+
+void tecnico_pegar_ticket(Tecnico *tecnico, Ticket *ticket) {
+    int tempoEstimado = getTempoEstimadoTicket(ticket);
+    tecnico->disponibilidadeTempo -= tempoEstimado;
+    tecnico->tempoTrabalhado += tempoEstimado;
+    finalizaTicket(ticket);
+}
+
+int tecnico_habil_para_ticket(Tecnico *tecnico, Ticket *ticket) {
+    char tipo = getTipoTicket(ticket);
+
+    if (tipo == 'S')
+        return strcmp(tecnico->areaAtuacao, "TI") == 0;
+
+    if (strcmp(tecnico->areaAtuacao, "TI") == 0)
+        return tipo == 'S';
+
+    return strcmp(tecnico->areaAtuacao, "GERAL") == 0;
+}
+
+int tecnico_tem_disponibilidade(Tecnico *tecnico, Ticket *ticket) {
+    int tempoEstimado = getTempoEstimadoTicket(ticket);
+
+    return tecnico->disponibilidadeTempo >= tempoEstimado;
+}
+
+int qsort_compara_tecnicos(const void * p1, const void * p2) {
+    Tecnico * t1 = *(Tecnico **) p1;
+    Tecnico * t2 = *(Tecnico **) p2;
+
+    return t2->tempoTrabalhado >= t1->tempoTrabalhado;
+}
+
+int tecnico_recupera_tempo_trabalhado(Tecnico *tecnico) {
+    return tecnico->tempoTrabalhado;
+}
+
+Data *tecnico_recupera_data(Tecnico *tecnico) {
+    return tecnico->data;
 }

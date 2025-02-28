@@ -30,19 +30,19 @@ struct Ticket
 Ticket *criaTicket(char *cpfSol, void *dado, func_ptr_tempoEstimado getTempo, func_ptr_tipo getTipo,
                    func_ptr_notifica notifica, func_ptr_desaloca desaloca)
 {
-    Ticket *pTicket = malloc(sizeof(struct Ticket));
-    assert(pTicket);
+    Ticket *ticket = malloc(sizeof(Ticket));
+    assert(ticket);
 
-    strcpy(pTicket->id, "");
-    strcpy(pTicket->cpfSol, cpfSol);
-    pTicket->dado = dado;
-    pTicket->getTempo = getTempo;
-    pTicket->getTipo = getTipo;
-    pTicket->notifica = notifica;
-    pTicket->desaloca = desaloca;
-    pTicket->finalizado = 0;
+    strcpy(ticket->id, "");
+    strcpy(ticket->cpfSol, cpfSol);
+    ticket->dado = dado;
+    ticket->getTempo = getTempo;
+    ticket->getTipo = getTipo;
+    ticket->notifica = notifica;
+    ticket->desaloca = desaloca;
+    ticket->finalizado = 0;
 
-    return pTicket;
+    return ticket;
 }
 
 /**

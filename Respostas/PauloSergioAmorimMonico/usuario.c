@@ -1,4 +1,5 @@
 #include "usuario.h"
+#include "constantes.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,18 +18,18 @@ struct usuario
 
 Usuario *usuario_criar(char *nome, char *cpf, Data *data, char *telefone, char *genero, char *setorTrabalho)
 {
-    Usuario *pUsuario = malloc(sizeof(struct usuario));
-    assert(pUsuario);
+    Usuario *usuario = malloc(sizeof(Usuario));
+    assert(usuario);
 
-    strcpy(pUsuario->nome, nome);
-    strcpy(pUsuario->cpf, cpf);
-    pUsuario->data = data;
-    strcpy(pUsuario->telefone, telefone);
-    strcpy(pUsuario->genero, genero);
-    strcpy(pUsuario->setorTrabalho, setorTrabalho);
-    pUsuario->ticketsSolicitados = 0;
+    strcpy(usuario->nome, nome);
+    strcpy(usuario->cpf, cpf);
+    usuario->data = data;
+    strcpy(usuario->telefone, telefone);
+    strcpy(usuario->genero, genero);
+    strcpy(usuario->setorTrabalho, setorTrabalho);
+    usuario->ticketsSolicitados = 0;
 
-    return pUsuario;
+    return usuario;
 }
 
 Usuario *usuario_ler()
@@ -64,7 +65,8 @@ int usuario_e_mesmo_cpf(Usuario *usuario, char *cpf)
 - Setor: RH
 - Tickets solicitados: 0
 */
-void usuario_print(Usuario *usuario) {
+void usuario_print(Usuario *usuario)
+{
     printf("- Nome: %s\n", usuario->nome);
     printf("- CPF: %s\n", usuario->cpf);
     printf("- Data de Nascimento: ");
@@ -79,4 +81,35 @@ void usuario_free(Usuario *usuario)
 {
     data_free(usuario->data);
     free(usuario);
+}
+
+char *usuario_recupera_cpf(Usuario *usuario)
+{
+    return usuario->cpf;
+}
+
+char *usuario_recupera_setor(Usuario *usuario) {
+    return usuario->setorTrabalho;
+}
+
+void usuario_incrementa_solicitacoes(Usuario *usuario)
+{
+    usuario->ticketsSolicitados++;
+}
+
+int usuario_recupera_solicitacoes(Usuario *usuario)
+{
+    return usuario->ticketsSolicitados;
+}
+
+int qsort_compara_usuarios(const void *p1, const void *p2)
+{
+    Usuario *u1 = *(Usuario **)p1;
+    Usuario *u2 = *(Usuario **)p2;
+
+    return u2->ticketsSolicitados >= u1->ticketsSolicitados;
+}
+
+Data *usuario_recupera_data(Usuario *usuario) {
+    return usuario->data;
 }

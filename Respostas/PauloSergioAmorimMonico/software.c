@@ -62,20 +62,6 @@ Software *lerSoftware()
  */
 void setTempoEstimadoSoftware(Software *s)
 {
-    int tempoEstimado = 0;
-
-    if (strcmp(s->categoria, "BUG") == 0)
-        tempoEstimado += 3;
-
-    if (strcmp(s->categoria, "OUTROS") == 0)
-        tempoEstimado += 2;
-
-    if (strcmp(s->categoria, "DUVIDA") == 0)
-        tempoEstimado += 1;
-
-    tempoEstimado += s->impacto;
-
-    s->tempoEstimado = tempoEstimado;
 }
 
 /**
@@ -86,10 +72,20 @@ void setTempoEstimadoSoftware(Software *s)
 int getTempoEstimadoSoftware(void *dado)
 {
     Software *software = (Software *)dado;
+    int tempoEstimado = 0;
 
-    setTempoEstimadoSoftware(software);
+    if (strcmp(software->categoria, "BUG") == 0)
+        tempoEstimado += TEMPO_ESTIMADO_BUG;
 
-    return software->tempoEstimado;
+    if (strcmp(software->categoria, "OUTROS") == 0)
+        tempoEstimado += TEMPO_ESTIMADO_OUTROS;
+
+    if (strcmp(software->categoria, "DUVIDA") == 0)
+        tempoEstimado += TEMPO_ESTIMADO_DUVIDA;
+
+    tempoEstimado += software->impacto;
+
+    return tempoEstimado;
 }
 
 /**

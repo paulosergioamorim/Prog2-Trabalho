@@ -1,39 +1,39 @@
 #include "lista_tecnicos.h"
+#include "constantes.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct lista_tecnicos
 {
     Tecnico **tecnicos;
-    int memSize;
+    int size;
     int count;
 };
 
 ListaTecnicos *lista_tecnicos_criar()
 {
-    ListaTecnicos *pListaTecnicos = malloc(sizeof(struct lista_tecnicos));
-    assert(pListaTecnicos);
+    ListaTecnicos *listaTecnicos = malloc(sizeof(ListaTecnicos));
+    assert(listaTecnicos);
 
-    pListaTecnicos->memSize = LISTA_CAPACIDADE_INICIAL;
-    pListaTecnicos->count = 0;
-    pListaTecnicos->tecnicos = malloc(pListaTecnicos->memSize * sizeof(Tecnico *));
+    listaTecnicos->size = LISTA_CAPACIDADE_INICIAL;
+    listaTecnicos->count = 0;
+    listaTecnicos->tecnicos = malloc(listaTecnicos->size * sizeof(Tecnico *));
 
-    return pListaTecnicos;
+    return listaTecnicos;
 }
 
-ListaTecnicos *lista_tecnicos_adicionar(ListaTecnicos *listaTecnicos, Tecnico *tecnico)
+void lista_tecnicos_adicionar(ListaTecnicos *listaTecnicos, Tecnico *tecnico)
 {
-    if (listaTecnicos->count + 2 == listaTecnicos->memSize)
+    if (listaTecnicos->count + 1 == listaTecnicos->size)
     {
-        listaTecnicos->memSize *= 2;
-        listaTecnicos->tecnicos = realloc(listaTecnicos->tecnicos, listaTecnicos->memSize * sizeof(Tecnico *));
+        listaTecnicos->size *= 2;
+        listaTecnicos->tecnicos = realloc(listaTecnicos->tecnicos, listaTecnicos->size * sizeof(Tecnico *));
     }
 
     listaTecnicos->tecnicos[listaTecnicos->count] = tecnico;
     listaTecnicos->count++;
-
-    return listaTecnicos;
 }
 
 void lista_tecnicos_free(ListaTecnicos *listaTecnicos)
@@ -56,4 +56,55 @@ void lista_tecnicos_print(ListaTecnicos *listaTecnicos)
     }
 
     printf("----------------------------\n\n");
+}
+
+int lista_tecnicos_quantidade(ListaTecnicos *listaTecnicos) {
+    return listaTecnicos->count;
+}
+
+Tecnico *lista_tecnicos_tecnico(ListaTecnicos *listaTecnicos, int i) {
+    return listaTecnicos->tecnicos[i];
+}
+
+void lista_tecnicos_print_por_ranking(ListaTecnicos *listaTecnicos) {
+    Tecnico **sortedTecnicos = malloc(listaTecnicos->count * sizeof(Tecnico *));
+    memcpy(sortedTecnicos, listaTecnicos->tecnicos, listaTecnicos->count * sizeof(Tecnico *));
+    qsort(sortedTecnicos, listaTecnicos->count, sizeof(Tecnico *), qsort_compara_tecnicos);
+
+    printf("----- RANKING DE TECNICOS -----\n");
+
+    for (int i = 0; i < listaTecnicos->count; i++)
+    {
+        printf("--------------------\n");
+        tecnico_print(sortedTecnicos[i]);
+    }
+
+    printf("-------------------------------\n\n");
+
+    free(sortedTecnicos);
+}
+
+int lista_tecnicos_media_idade(ListaTecnicos *listaTecnicos) {
+    int soma = 0;
+    Data *dataHoje = data_criar(18, 02, 2025);
+
+    for (int i = 0; i < listaTecnicos->count; i++)
+    {
+        Data *data = tecnico_recupera_data(listaTecnicos->tecnicos[i]);
+        int idade = data_anos_diferenca(data, dataHoje);
+        soma += idade;
+    }
+
+    free(dataHoje);
+
+    return soma / listaTecnicos->count;
+}
+
+int lista_tecnicos_media_trabalho(ListaTecnicos *listaTecnicos) {
+    int soma = 0;
+
+    for (int i = 0; i < listaTecnicos->count; i++)
+        soma += tecnico_recupera_tempo_trabalhado(listaTecnicos->tecnicos[i]);
+
+    return soma / listaTecnicos->count;
 }
