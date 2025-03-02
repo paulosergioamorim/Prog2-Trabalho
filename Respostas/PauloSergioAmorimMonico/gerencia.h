@@ -4,6 +4,6 @@ typedef struct gerencia *Gerencia;
 
 Gerencia criarGerencia();
 
-void realizarGerencia(Gerencia gerencia);
+void handleOption(Gerencia gerencia, const char option);
 
 void liberarGerencia(Gerencia gerencia);

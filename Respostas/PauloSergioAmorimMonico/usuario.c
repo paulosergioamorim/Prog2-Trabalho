@@ -16,9 +16,9 @@ struct usuario
     int ticketsSolicitados;
 };
 
-Usuario *usuario_criar(char *nome, char *cpf, Data *data, char *telefone, char *genero, char *setorTrabalho)
+Usuario usuario_criar(char *nome, char *cpf, Data *data, char *telefone, char *genero, char *setorTrabalho)
 {
-    Usuario *usuario = malloc(sizeof(Usuario));
+    Usuario usuario = malloc(sizeof(struct usuario));
     assert(usuario);
 
     strcpy(usuario->nome, nome);
@@ -32,7 +32,7 @@ Usuario *usuario_criar(char *nome, char *cpf, Data *data, char *telefone, char *
     return usuario;
 }
 
-Usuario *usuario_ler()
+Usuario usuario_ler()
 {
     char nome[TAM_NOME] = "";
     char cpf[TAM_CPF] = "";
@@ -51,7 +51,7 @@ Usuario *usuario_ler()
     return usuario_criar(nome, cpf, data, telefone, genero, setorTrabalho);
 }
 
-int usuario_e_mesmo_cpf(Usuario *usuario, char *cpf)
+int usuario_e_mesmo_cpf(Usuario usuario, char *cpf)
 {
     return strcmp(usuario->cpf, cpf) == 0;
 }
@@ -65,8 +65,9 @@ int usuario_e_mesmo_cpf(Usuario *usuario, char *cpf)
 - Setor: RH
 - Tickets solicitados: 0
 */
-void usuario_print(Usuario *usuario)
+void usuario_print(Usuario usuario)
 {
+    printf("--------------------\n");
     printf("- Nome: %s\n", usuario->nome);
     printf("- CPF: %s\n", usuario->cpf);
     printf("- Data de Nascimento: ");
@@ -77,35 +78,35 @@ void usuario_print(Usuario *usuario)
     printf("- Tickets solicitados: %d\n", usuario->ticketsSolicitados);
 }
 
-void usuario_free(Usuario *usuario)
+void usuario_free(Usuario usuario)
 {
     data_free(usuario->data);
     free(usuario);
 }
 
-char *usuario_recupera_cpf(Usuario *usuario)
+char *usuario_recupera_cpf(Usuario usuario)
 {
     return usuario->cpf;
 }
 
-char *usuario_recupera_setor(Usuario *usuario) {
+char *usuario_recupera_setor(Usuario usuario) {
     return usuario->setorTrabalho;
 }
 
-void usuario_incrementa_solicitacoes(Usuario *usuario)
+void usuario_incrementa_solicitacoes(Usuario usuario)
 {
     usuario->ticketsSolicitados++;
 }
 
-int usuario_recupera_solicitacoes(Usuario *usuario)
+int usuario_recupera_solicitacoes(Usuario usuario)
 {
     return usuario->ticketsSolicitados;
 }
 
 int qsort_compara_usuarios(const void *p1, const void *p2)
 {
-    Usuario *u1 = *(Usuario **)p1;
-    Usuario *u2 = *(Usuario **)p2;
+    Usuario u1 = *(Usuario *)p1;
+    Usuario u2 = *(Usuario *)p2;
 
     if (u2->ticketsSolicitados > u1->ticketsSolicitados)
         return 1;
@@ -116,6 +117,12 @@ int qsort_compara_usuarios(const void *p1, const void *p2)
     return 0;
 }
 
-Data *usuario_recupera_data(Usuario *usuario) {
-    return usuario->data;
+int usuario_recupera_idade(Usuario usuario) {
+    Data *dataHoje = data_criar(18, 02, 2025);
+    
+    int anos = data_anos_diferenca(usuario->data, dataHoje);
+
+    data_free(dataHoje);
+
+    return anos;
 }
