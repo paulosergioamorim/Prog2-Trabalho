@@ -89,7 +89,8 @@ char *usuario_recupera_cpf(Usuario usuario)
     return usuario->cpf;
 }
 
-char *usuario_recupera_setor(Usuario usuario) {
+char *usuario_recupera_setor(Usuario usuario)
+{
     return usuario->setorTrabalho;
 }
 
@@ -108,18 +109,16 @@ int qsort_compara_usuarios(const void *p1, const void *p2)
     Usuario u1 = *(Usuario *)p1;
     Usuario u2 = *(Usuario *)p2;
 
-    if (u2->ticketsSolicitados > u1->ticketsSolicitados)
-        return 1;
+    if (u2->ticketsSolicitados == u1->ticketsSolicitados)
+        return strcmp(u2->nome, u1->nome) == -1;
 
-    if (strcmp(u2->nome, u1->nome) == -1)
-        return 1;
-
-    return 0;
+    return u2->ticketsSolicitados > u1->ticketsSolicitados;
 }
 
-int usuario_recupera_idade(Usuario usuario) {
+int usuario_recupera_idade(Usuario usuario)
+{
     Data *dataHoje = data_criar(18, 02, 2025);
-    
+
     int anos = data_anos_diferenca(usuario->data, dataHoje);
 
     data_free(dataHoje);

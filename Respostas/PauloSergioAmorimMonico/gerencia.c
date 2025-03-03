@@ -49,7 +49,7 @@ void handleOption(Gerencia gerencia, const char option)
         if (strcmp(comando, "RANKING TECNICOS") == 0)
         {
             Tecnicos sortedList = Tecnicos_to_sorted(gerencia->tecnicos, qsort_compara_tecnicos);
-            Tecnicos_print(sortedList, "----- RANKING DE TECNICOS -----\n", "----------------------------\n\n");
+            Tecnicos_print(sortedList, "----- RANKING DE TECNICOS -----\n", "-------------------------------\n\n");
             Tecnicos_free_only_buffer(sortedList);
         }
 
@@ -59,7 +59,7 @@ void handleOption(Gerencia gerencia, const char option)
         if (strcmp(comando, "RANKING USUARIOS") == 0)
         {
             Usuarios sortedList = Usuarios_to_sorted(gerencia->usuarios, qsort_compara_usuarios);
-            Usuarios_print(sortedList, "----- RANKING DE USUARIOS -----\n", "----------------------------\n\n");
+            Usuarios_print(sortedList, "----- RANKING DE USUARIOS -----\n", "-------------------------------\n\n");
             Usuarios_free_only_buffer(sortedList);
         }
 
@@ -102,12 +102,26 @@ void handleOption(Gerencia gerencia, const char option)
     else if (option == 'T')
     {
         Tecnico tecnico = tecnico_ler();
+
+        if (Tecnicos_get_by_char_property(gerencia->tecnicos, tecnico_recupera_cpf(tecnico), tecnico_recupera_cpf))
+        {
+            tecnico_free(tecnico);
+            return;
+        }
+
         Tecnicos_push(gerencia->tecnicos, tecnico);
     }
 
     else if (option == 'U')
     {
         Usuario usuario = usuario_ler();
+
+        if (Usuarios_get_by_char_property(gerencia->usuarios, usuario_recupera_cpf(usuario), usuario_recupera_cpf))
+        {
+            usuario_free(usuario);
+            return;
+        }
+
         Usuarios_push(gerencia->usuarios, usuario);
     }
 

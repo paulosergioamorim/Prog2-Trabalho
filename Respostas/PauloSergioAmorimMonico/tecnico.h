@@ -24,6 +24,8 @@ int tecnico_habil_para_ticket(Tecnico tecnico, Ticket *ticket);
 
 int tecnico_tem_disponibilidade(Tecnico tecnico, Ticket *ticket);
 
+char *tecnico_recupera_cpf(Tecnico tecnico);
+
 int tecnico_recupera_idade(Tecnico tecnico);
 
 int tecnico_recupera_tempo_trabalhado(Tecnico tecnico);
