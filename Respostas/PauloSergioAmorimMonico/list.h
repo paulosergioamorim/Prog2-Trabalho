@@ -106,21 +106,11 @@
         return sum / list->count;                                                                                      \
     }                                                                                                                  \
                                                                                                                        \
-    void T##s_print(T##s list, const char *beforeStr, const char *afterStr)                                            \
+    void T##s_print(T##s list)                                                                                         \
     {                                                                                                                  \
-        if (beforeStr)                                                                                                 \
-        {                                                                                                              \
-            printf("%s", beforeStr);                                                                                   \
-        }                                                                                                              \
-                                                                                                                       \
         for (int i = 0; i < list->count; i++)                                                                          \
         {                                                                                                              \
             list->print_fn(list->buffer[i]);                                                                           \
-        }                                                                                                              \
-                                                                                                                       \
-        if (afterStr)                                                                                                  \
-        {                                                                                                              \
-            printf("%s", afterStr);                                                                                    \
         }                                                                                                              \
     }                                                                                                                  \
                                                                                                                        \

@@ -61,6 +61,9 @@ void setTempoEstimadoManutencao(Manutencao *manutencao)
 
     else if (strcmp(manutencao->estado, "RUIM") == 0)
         manutencao->tempoEstimado = 3;
+    
+    else
+        manutencao->tempoEstimado = -1;
 
     if (strcmp(manutencao->setor, "RH") == 0)
         manutencao->tempoEstimado *= 2;

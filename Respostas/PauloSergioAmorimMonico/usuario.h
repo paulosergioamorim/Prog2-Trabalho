@@ -4,24 +4,24 @@
 
 typedef struct usuario *Usuario;
 
-Usuario usuario_criar(char *nome, char *cpf, Data* data, char *telefone, char *genero, char *setorTrabalho);
+Usuario criarUsuario(char *nome, char *cpf, Data* data, char *telefone, char *genero, char *setorTrabalho);
 
-Usuario usuario_ler();
+Usuario lerUsuario();
 
-int usuario_e_mesmo_cpf(Usuario usuario, char *cpf);
+int eMesmoCPFUsuario(Usuario usuario, char *cpf);
 
-void usuario_print(Usuario usuario);
+void imprimirUsuario(Usuario usuario);
 
-void usuario_free(Usuario usuario);
+void liberarUsuario(Usuario usuario);
 
-char *usuario_recupera_cpf(Usuario usuario);
+char *getCPFUsuario(Usuario usuario);
 
-char *usuario_recupera_setor(Usuario usuario);
+char *getSetorUsuario(Usuario usuario);
 
-void usuario_incrementa_solicitacoes(Usuario usuario);
+void addSolicitacaoUsuario(Usuario usuario);
 
-int usuario_recupera_solicitacoes(Usuario usuario);
+int getSolicitacoesUsuario(Usuario usuario);
 
-int qsort_compara_usuarios(const void * p1, const void * p2);
+int compararUsuarios(const void * p1, const void * p2);
 
-int usuario_recupera_idade(Usuario usuario);
+int getIdadeUsuario(Usuario usuario);

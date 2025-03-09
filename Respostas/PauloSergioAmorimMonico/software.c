@@ -1,5 +1,4 @@
 #include "software.h"
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,8 +23,7 @@ struct Software
  */
 Software *criaSoftware(char *nome, char *categoria, int impacto, char *motivo)
 {
-    Software *software = malloc(sizeof(struct Software));
-    assert(software);
+    Software *software = malloc(sizeof(Software));
 
     strcpy(software->nome, nome);
     strcpy(software->categoria, categoria);
@@ -65,11 +63,14 @@ void setTempoEstimadoSoftware(Software *s)
     if (strcmp(s->categoria, "BUG") == 0)
         s->tempoEstimado = TEMPO_ESTIMADO_BUG;
 
-    if (strcmp(s->categoria, "OUTROS") == 0)
+    else if (strcmp(s->categoria, "OUTROS") == 0)
         s->tempoEstimado = TEMPO_ESTIMADO_OUTROS;
 
-    if (strcmp(s->categoria, "DUVIDA") == 0)
+    else if (strcmp(s->categoria, "DUVIDA") == 0)
         s->tempoEstimado = TEMPO_ESTIMADO_DUVIDA;
+    
+    else
+        s->tempoEstimado = -10;
 
     s->tempoEstimado += s->impacto;
 }

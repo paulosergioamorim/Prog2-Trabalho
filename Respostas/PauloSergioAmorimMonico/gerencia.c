@@ -27,39 +27,49 @@ Gerencia criarGerencia()
     Gerencia gerencia = malloc(sizeof(struct gerencia));
 
     gerencia->tickets = criaFila();
-    gerencia->tecnicos = Tecnicos_create(tecnico_print, tecnico_free);
-    gerencia->usuarios = Usuarios_create(usuario_print, usuario_free);
+    gerencia->tecnicos = Tecnicos_create(imprimirTecnico, liberarTecnico);
+    gerencia->usuarios = Usuarios_create(imprimirUsuario, liberarUsuario);
 
     return gerencia;
 }
 
-void handleOption(Gerencia gerencia, const char option)
+void realizarGerencia(Gerencia gerencia, const char opcao)
 {
-    if (option == 'F')
+    if (opcao == 'F')
         return;
 
-    if (option == 'E')
+    if (opcao == 'E')
     {
         char comando[sizeof("RANKING TECNICOS")] = "";
         scanf("%[^\n]%*c", comando);
 
-        if (strcmp(comando, "TECNICOS") == 0)
-            Tecnicos_print(gerencia->tecnicos, "----- BANCO DE TECNICOS -----\n", "----------------------------\n\n");
+        if (strcmp(comando, "TECNICOS") == 0) {
+            printf("----- BANCO DE TECNICOS -----\n");
+            Tecnicos_print(gerencia->tecnicos);
+            printf("----------------------------\n\n");
+        }
 
         if (strcmp(comando, "RANKING TECNICOS") == 0)
         {
-            Tecnicos sortedList = Tecnicos_to_sorted(gerencia->tecnicos, qsort_compara_tecnicos);
-            Tecnicos_print(sortedList, "----- RANKING DE TECNICOS -----\n", "-------------------------------\n\n");
+            Tecnicos sortedList = Tecnicos_to_sorted(gerencia->tecnicos, compararTecnicos);
+            printf("----- RANKING DE TECNICOS -----\n");
+            Tecnicos_print(sortedList);
+            printf("-------------------------------\n\n");
             Tecnicos_free_only_buffer(sortedList);
         }
 
-        if (strcmp(comando, "USUARIOS") == 0)
-            Usuarios_print(gerencia->usuarios, "----- BANCO DE USUARIOS -----\n", "----------------------------\n\n");
+        if (strcmp(comando, "USUARIOS") == 0) {
+            printf("----- BANCO DE USUARIOS -----\n");
+            Usuarios_print(gerencia->usuarios);
+            printf("----------------------------\n\n");
+        }
 
         if (strcmp(comando, "RANKING USUARIOS") == 0)
         {
-            Usuarios sortedList = Usuarios_to_sorted(gerencia->usuarios, qsort_compara_usuarios);
-            Usuarios_print(sortedList, "----- RANKING DE USUARIOS -----\n", "-------------------------------\n\n");
+            Usuarios sortedList = Usuarios_to_sorted(gerencia->usuarios, compararUsuarios);
+            printf("----- RANKING DE USUARIOS -----\n");
+            Usuarios_print(sortedList);
+            printf("-------------------------------\n\n");
             Usuarios_free_only_buffer(sortedList);
         }
 
@@ -67,6 +77,7 @@ void handleOption(Gerencia gerencia, const char option)
         {
             int countTickets = getQtdTicketsNaFila(gerencia->tickets);
             int countTecnicos = Tecnicos_get_count(gerencia->tecnicos);
+            int start = 0; // Índice inicial para o Round Robin
 
             for (int i = 0; i < countTickets; i++)
             {
@@ -75,16 +86,31 @@ void handleOption(Gerencia gerencia, const char option)
                 if (getStatusTicket(ticket) == 'F')
                     continue;
 
-                for (int j = 0; j < countTecnicos; j++)
+                int quantidadeTecnicosOferecidos = 0;
+                int j = start;
+                int algumTecnicoPegouTicket = 0;
+
+                // Tenta técnicos em ordem circular
+                while (quantidadeTecnicosOferecidos < countTecnicos)
                 {
                     Tecnico tecnico = Tecnicos_get(gerencia->tecnicos, j);
 
-                    if (!tecnico_tem_disponibilidade(tecnico, ticket) || !tecnico_habil_para_ticket(tecnico, ticket))
-                        continue;
+                    if (podePegarTicketTecnico(tecnico, ticket))
+                    {
+                        pegarTicketTecnico(tecnico, ticket);
+                        algumTecnicoPegouTicket = 1;
+                        break;
+                    }
 
-                    tecnico_pegar_ticket(tecnico, ticket);
-                    break;
+                    j = (j + 1) % countTecnicos;
+                    quantidadeTecnicosOferecidos++;
                 }
+
+                // Atualiza o ponto inicial para o próximo ticket
+                if (algumTecnicoPegouTicket)
+                    start = (j + 1) % countTecnicos;
+                else
+                    start = (start + 1) % countTecnicos;
             }
         }
 
@@ -99,40 +125,40 @@ void handleOption(Gerencia gerencia, const char option)
             imprimirRelatorioGeral(gerencia);
     }
 
-    else if (option == 'T')
+    else if (opcao == 'T')
     {
-        Tecnico tecnico = tecnico_ler();
+        Tecnico tecnico = lerTecnico();
 
-        if (Tecnicos_get_by_char_property(gerencia->tecnicos, tecnico_recupera_cpf(tecnico), tecnico_recupera_cpf))
+        if (Tecnicos_get_by_char_property(gerencia->tecnicos, getCPFTecnico(tecnico), getCPFTecnico))
         {
-            tecnico_free(tecnico);
+            liberarTecnico(tecnico);
             return;
         }
 
         Tecnicos_push(gerencia->tecnicos, tecnico);
     }
 
-    else if (option == 'U')
+    else if (opcao == 'U')
     {
-        Usuario usuario = usuario_ler();
+        Usuario usuario = lerUsuario();
 
-        if (Usuarios_get_by_char_property(gerencia->usuarios, usuario_recupera_cpf(usuario), usuario_recupera_cpf))
+        if (Usuarios_get_by_char_property(gerencia->usuarios, getCPFUsuario(usuario), getCPFUsuario))
         {
-            usuario_free(usuario);
+            liberarUsuario(usuario);
             return;
         }
 
         Usuarios_push(gerencia->usuarios, usuario);
     }
 
-    else if (option == 'A')
+    else if (opcao == 'A')
     {
         char cpfSol[TAM_CPF] = "";
         char tipoTicket[MAX_LENGTH_TIPO_TICKET] = "";
         scanf("%[^\n]%*c", cpfSol);
         scanf("%[^\n]%*c", tipoTicket);
 
-        Usuario solicitante = Usuarios_get_by_char_property(gerencia->usuarios, cpfSol, usuario_recupera_cpf);
+        Usuario solicitante = Usuarios_get_by_char_property(gerencia->usuarios, cpfSol, getCPFUsuario);
 
         if (strcmp(tipoTicket, "MANUTENCAO") == 0)
         {
@@ -145,7 +171,7 @@ void handleOption(Gerencia gerencia, const char option)
                 return;
             }
 
-            setSetor(manutecao, usuario_recupera_setor(solicitante));
+            setSetor(manutecao, getSetorUsuario(solicitante));
 
             insereTicketFila(gerencia->tickets, cpfSol, manutecao, getTempoEstimadoManutencao, getTipoManutencao,
                              notificaManutencao, desalocaManutencao);
@@ -180,7 +206,7 @@ void handleOption(Gerencia gerencia, const char option)
                              desalocaOutros);
         }
 
-        usuario_incrementa_solicitacoes(solicitante);
+        addSolicitacaoUsuario(solicitante);
     }
 }
 
@@ -200,9 +226,9 @@ void imprimirRelatorioGeral(Gerencia gerencia)
     printf("- Qtd tickets (A): %d\n", getQtdTicketsPorStatusNaFila(gerencia->tickets, 'A'));
     printf("- Qtd tickets (F): %d\n", getQtdTicketsPorStatusNaFila(gerencia->tickets, 'F'));
     printf("- Qtd usuarios: %d\n", Usuarios_get_count(gerencia->usuarios));
-    printf("- Md idade usuarios: %d\n", Usuarios_average(gerencia->usuarios, usuario_recupera_idade));
+    printf("- Md idade usuarios: %d\n", Usuarios_average(gerencia->usuarios, getIdadeUsuario));
     printf("- Qtd tecnicos: %d\n", Tecnicos_get_count(gerencia->tecnicos));
-    printf("- Md idade tecnicos: %d\n", Tecnicos_average(gerencia->tecnicos, tecnico_recupera_idade));
-    printf("- Md trabalho tecnicos: %d\n", Tecnicos_average(gerencia->tecnicos, tecnico_recupera_tempo_trabalhado));
+    printf("- Md idade tecnicos: %d\n", Tecnicos_average(gerencia->tecnicos, getIdadeTecnico));
+    printf("- Md trabalho tecnicos: %d\n", Tecnicos_average(gerencia->tecnicos, getTempoTrabalhadoTecnico));
     printf("---------------------------\n\n");
 }

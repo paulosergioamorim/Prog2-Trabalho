@@ -1,7 +1,6 @@
 #include "tecnico.h"
 #include "constantes.h"
 #include "ticket.h"
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -19,11 +18,10 @@ struct tecnico
     int tempoTrabalhado;
 };
 
-Tecnico tecnico_criar(char *nome, char *cpf, Data *data, char *genero, char *telefone, char *areaAtuacao, float salario,
+Tecnico criarTecnico(char *nome, char *cpf, Data *data, char *genero, char *telefone, char *areaAtuacao, float salario,
                       int disponibilidadeTempo)
 {
     Tecnico tecnico = malloc(sizeof(struct tecnico));
-    assert(tecnico);
 
     strcpy(tecnico->nome, nome);
     strcpy(tecnico->cpf, cpf);
@@ -49,7 +47,7 @@ GERAL
 3500
 */
 
-Tecnico tecnico_ler()
+Tecnico lerTecnico()
 {
     char nome[TAM_NOME] = "";
     char cpf[TAM_CPF] = "";
@@ -62,17 +60,17 @@ Tecnico tecnico_ler()
 
     scanf("%[^\n]%*c", nome);
     scanf("%[^\n]%*c", cpf);
-    data = data_ler();
+    data = lerData();
     scanf("%[^\n]%*c", telefone);
     scanf("%[^\n]%*c", genero);
     scanf("%[^\n]%*c", areaAtuacao);
     scanf("%d%*c", &disponibilidadeTempo);
     scanf("%f%*c", &salario);
 
-    return tecnico_criar(nome, cpf, data, genero, telefone, areaAtuacao, salario, disponibilidadeTempo);
+    return criarTecnico(nome, cpf, data, genero, telefone, areaAtuacao, salario, disponibilidadeTempo);
 }
 
-int tecnico_e_mesmo_cpf(Tecnico tecnico, char *cpf)
+int eMesmoCPFTecnico(Tecnico tecnico, char *cpf)
 {
     return strcmp(tecnico->cpf, cpf) == 0;
 }
@@ -88,13 +86,13 @@ int tecnico_e_mesmo_cpf(Tecnico tecnico, char *cpf)
 - Disponibilidade: 7h
 - Tempo Trabalhado: 0h
 */
-void tecnico_print(Tecnico tecnico)
+void imprimirTecnico(Tecnico tecnico)
 {
     printf("--------------------\n");
     printf("- Nome: %s\n", tecnico->nome);
     printf("- CPF: %s\n", tecnico->cpf);
     printf("- Data de Nascimento: ");
-    data_print(tecnico->data);
+    imprimirData(tecnico->data);
     printf("- Telefone: %s\n", tecnico->telefone);
     printf("- Genero: %s\n", tecnico->genero);
     printf("- Area de Atuacao: %s\n", tecnico->areaAtuacao);
@@ -103,18 +101,18 @@ void tecnico_print(Tecnico tecnico)
     printf("- Tempo Trabalhado: %dh\n", tecnico->tempoTrabalhado);
 }
 
-void tecnico_free(Tecnico tecnico)
+void liberarTecnico(Tecnico tecnico)
 {
-    data_free(tecnico->data);
+    liberarData(tecnico->data);
     free(tecnico);
 }
 
-int tecnico_recupera_disponibilidade(Tecnico tecnico)
+int getDisponibilidadeTecnico(Tecnico tecnico)
 {
     return tecnico->disponibilidadeTempo;
 }
 
-void tecnico_pegar_ticket(Tecnico tecnico, Ticket *ticket)
+void pegarTicketTecnico(Tecnico tecnico, Ticket *ticket)
 {
     int tempoEstimado = getTempoEstimadoTicket(ticket);
     tecnico->disponibilidadeTempo -= tempoEstimado;
@@ -122,51 +120,50 @@ void tecnico_pegar_ticket(Tecnico tecnico, Ticket *ticket)
     finalizaTicket(ticket);
 }
 
-int tecnico_habil_para_ticket(Tecnico tecnico, Ticket *ticket)
+int podePegarTicketTecnico(Tecnico tecnico, Ticket *ticket)
 {
+    if (tecnico->disponibilidadeTempo < getTempoEstimadoTicket(ticket))
+        return 0;
+
     char tipo = getTipoTicket(ticket);
 
-    if (tipo == 'S' || strcmp(tecnico->areaAtuacao, "TI") == 0)
-        return tipo == 'S' && strcmp(tecnico->areaAtuacao, "TI") == 0;
+    if (tipo == 'S') 
+        return strcmp(tecnico->areaAtuacao, "TI") == 0;
+
+    if (strcmp(tecnico->areaAtuacao, "TI") == 0)
+        return tipo == 'S';
 
     return 1;
 }
 
-int tecnico_tem_disponibilidade(Tecnico tecnico, Ticket *ticket)
-{
-    int tempoEstimado = getTempoEstimadoTicket(ticket);
-
-    return tecnico->disponibilidadeTempo >= tempoEstimado;
-}
-
-int qsort_compara_tecnicos(const void *p1, const void *p2)
+int compararTecnicos(const void *p1, const void *p2)
 {
     Tecnico t1 = *(Tecnico *)p1;
     Tecnico t2 = *(Tecnico *)p2;
 
     if (t2->tempoTrabalhado == t1->tempoTrabalhado)
-        return strcmp(t2->nome, t1->nome) == -1;
+        return strcmp(t1->nome, t2->nome);
 
-    return t2->tempoTrabalhado > t1->tempoTrabalhado;
+    return t2->tempoTrabalhado - t1->tempoTrabalhado;
 }
 
-int tecnico_recupera_tempo_trabalhado(Tecnico tecnico)
+int getTempoTrabalhadoTecnico(Tecnico tecnico)
 {
     return tecnico->tempoTrabalhado;
 }
 
-int tecnico_recupera_idade(Tecnico tecnico)
+int getIdadeTecnico(Tecnico tecnico)
 {
-    Data *dataHoje = data_criar(18, 02, 2025);
+    Data *dataHoje = criarData(18, 02, 2025);
 
-    int anos = data_anos_diferenca(tecnico->data, dataHoje);
+    int anos = getAnosDiferencaData(tecnico->data, dataHoje);
 
-    data_free(dataHoje);
+    liberarData(dataHoje);
 
     return anos;
 }
 
-char *tecnico_recupera_cpf(Tecnico tecnico)
+char *getCPFTecnico(Tecnico tecnico)
 {
     return tecnico->cpf;
 }

@@ -2,18 +2,18 @@
 
 typedef struct data Data;
 
-Data *data_criar(int dia, int mes, int ano);
+Data *criarData(int dia, int mes, int ano);
 
-Data *data_ler();
+Data *lerData();
 
-void data_print(Data *data);
+void imprimirData(Data *data);
 
-int data_e_valida(Data *data);
+int eDataValida(Data *data);
 
-int data_e_ano_bissexto(Data *data);
+int eAnoBissextoData(Data *data);
 
-int data_anos_diferenca(Data *data1, Data *data2);
+int getAnosDiferencaData(Data *data1, Data *data2);
 
-int data_comparar(void *pData1, void *pData2);
+int compararDatas(void *pData1, void *pData2);
 
-void data_free(Data *data);
+void liberarData(Data *data);

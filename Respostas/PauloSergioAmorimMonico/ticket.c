@@ -1,5 +1,4 @@
 #include "ticket.h"
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -31,9 +30,7 @@ Ticket *criaTicket(char *cpfSol, void *dado, func_ptr_tempoEstimado getTempo, fu
                    func_ptr_notifica notifica, func_ptr_desaloca desaloca)
 {
     Ticket *ticket = malloc(sizeof(Ticket));
-    assert(ticket);
 
-    strcpy(ticket->id, "");
     strcpy(ticket->cpfSol, cpfSol);
     ticket->dado = dado;
     ticket->getTempo = getTempo;
@@ -115,6 +112,7 @@ void desalocaTicket(Ticket *doc)
 {
     doc->desaloca(doc->dado);
     free(doc);
+    doc = NULL;
 }
 
 /**
@@ -132,7 +130,7 @@ void notificaTicket(Ticket *doc)
         printf("- Status: Finalizado\n");
 
     else
-        printf("- Status: Andamento\n");
+        printf("- Status: Aberto\n");
 
     printf("-------------------------\n\n");
 }

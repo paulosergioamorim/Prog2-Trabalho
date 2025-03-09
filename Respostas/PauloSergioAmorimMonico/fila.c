@@ -55,7 +55,7 @@ void desalocaFila(Fila *f)
 void insereTicketFila(Fila *f, char *cpfSol, void *dado, func_ptr_tempoEstimado getTempo, func_ptr_tipo getTipo,
                       func_ptr_notifica notifica, func_ptr_desaloca desaloca)
 {
-    if (f->count + 1 == f->size)
+    if (f->count == f->size)
     {
         f->size *= 2;
         f->tickets = realloc(f->tickets, f->size * sizeof(Ticket *));
@@ -103,6 +103,9 @@ int getQtdTicketsPorStatusNaFila(Fila *f, char status)
  * @return  Ticket recuperado da fila
  */
 Ticket *getTicketNaFila(Fila *f, int i) {
+    if (i < 0 || i >= f->count)
+        return NULL;
+    
     return f->tickets[i];
 }
 

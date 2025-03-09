@@ -1,6 +1,5 @@
 #include "usuario.h"
 #include "constantes.h"
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,10 +15,9 @@ struct usuario
     int ticketsSolicitados;
 };
 
-Usuario usuario_criar(char *nome, char *cpf, Data *data, char *telefone, char *genero, char *setorTrabalho)
+Usuario criarUsuario(char *nome, char *cpf, Data *data, char *telefone, char *genero, char *setorTrabalho)
 {
     Usuario usuario = malloc(sizeof(struct usuario));
-    assert(usuario);
 
     strcpy(usuario->nome, nome);
     strcpy(usuario->cpf, cpf);
@@ -32,7 +30,7 @@ Usuario usuario_criar(char *nome, char *cpf, Data *data, char *telefone, char *g
     return usuario;
 }
 
-Usuario usuario_ler()
+Usuario lerUsuario()
 {
     char nome[TAM_NOME] = "";
     char cpf[TAM_CPF] = "";
@@ -43,15 +41,15 @@ Usuario usuario_ler()
 
     scanf("%[^\n]%*c", nome);
     scanf("%[^\n]%*c", cpf);
-    data = data_ler();
+    data = lerData();
     scanf("%[^\n]%*c", telefone);
     scanf("%[^\n]%*c", genero);
     scanf("%[^\n]%*c", setorTrabalho);
 
-    return usuario_criar(nome, cpf, data, telefone, genero, setorTrabalho);
+    return criarUsuario(nome, cpf, data, telefone, genero, setorTrabalho);
 }
 
-int usuario_e_mesmo_cpf(Usuario usuario, char *cpf)
+int eMesmoCPFUsuario(Usuario usuario, char *cpf)
 {
     return strcmp(usuario->cpf, cpf) == 0;
 }
@@ -65,63 +63,63 @@ int usuario_e_mesmo_cpf(Usuario usuario, char *cpf)
 - Setor: RH
 - Tickets solicitados: 0
 */
-void usuario_print(Usuario usuario)
+void imprimirUsuario(Usuario usuario)
 {
     printf("--------------------\n");
     printf("- Nome: %s\n", usuario->nome);
     printf("- CPF: %s\n", usuario->cpf);
     printf("- Data de Nascimento: ");
-    data_print(usuario->data);
+    imprimirData(usuario->data);
     printf("- Telefone: %s\n", usuario->telefone);
     printf("- Genero: %s\n", usuario->genero);
     printf("- Setor: %s\n", usuario->setorTrabalho);
     printf("- Tickets solicitados: %d\n", usuario->ticketsSolicitados);
 }
 
-void usuario_free(Usuario usuario)
+void liberarUsuario(Usuario usuario)
 {
-    data_free(usuario->data);
+    liberarData(usuario->data);
     free(usuario);
 }
 
-char *usuario_recupera_cpf(Usuario usuario)
+char *getCPFUsuario(Usuario usuario)
 {
     return usuario->cpf;
 }
 
-char *usuario_recupera_setor(Usuario usuario)
+char *getSetorUsuario(Usuario usuario)
 {
     return usuario->setorTrabalho;
 }
 
-void usuario_incrementa_solicitacoes(Usuario usuario)
+void addSolicitacaoUsuario(Usuario usuario)
 {
     usuario->ticketsSolicitados++;
 }
 
-int usuario_recupera_solicitacoes(Usuario usuario)
+int getSolicitacoesUsuario(Usuario usuario)
 {
     return usuario->ticketsSolicitados;
 }
 
-int qsort_compara_usuarios(const void *p1, const void *p2)
+int compararUsuarios(const void *p1, const void *p2)
 {
     Usuario u1 = *(Usuario *)p1;
     Usuario u2 = *(Usuario *)p2;
 
     if (u2->ticketsSolicitados == u1->ticketsSolicitados)
-        return strcmp(u2->nome, u1->nome) == -1;
+        return strcmp(u1->nome, u2->nome);
 
-    return u2->ticketsSolicitados > u1->ticketsSolicitados;
+    return u2->ticketsSolicitados - u1->ticketsSolicitados;
 }
 
-int usuario_recupera_idade(Usuario usuario)
+int getIdadeUsuario(Usuario usuario)
 {
-    Data *dataHoje = data_criar(18, 02, 2025);
+    Data *dataHoje = criarData(18, 02, 2025);
 
-    int anos = data_anos_diferenca(usuario->data, dataHoje);
+    int anos = getAnosDiferencaData(usuario->data, dataHoje);
 
-    data_free(dataHoje);
+    liberarData(dataHoje);
 
     return anos;
 }

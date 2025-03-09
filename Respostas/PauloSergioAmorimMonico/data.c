@@ -10,7 +10,7 @@ struct data
     int ano;
 };
 
-Data *data_criar(int dia, int mes, int ano)
+Data *criarData(int dia, int mes, int ano)
 {
     Data *pData = malloc(sizeof(struct data));
     assert(pData);
@@ -22,7 +22,7 @@ Data *data_criar(int dia, int mes, int ano)
     return pData;
 }
 
-Data *data_ler()
+Data *lerData()
 {
     int dia = 0;
     int mes = 0;
@@ -30,15 +30,15 @@ Data *data_ler()
 
     scanf("%d/%d/%d%*c", &dia, &mes, &ano);
 
-    return data_criar(dia, mes, ano);
+    return criarData(dia, mes, ano);
 }
 
-void data_print(Data *data)
+void imprimirData(Data *data)
 {
     printf("%d/%d/%d\n", data->dia, data->mes, data->ano);
 }
 
-int data_e_valida(Data *data)
+int eDataValida(Data *data)
 {
     if (data->dia < 1 || 31 < data->dia)
         return 0;
@@ -52,7 +52,7 @@ int data_e_valida(Data *data)
     switch (data->mes)
     {
     case 2:
-        if (data_e_ano_bissexto(data))
+        if (eAnoBissextoData(data))
         {
             if (data->dia > 29)
                 return 0;
@@ -79,12 +79,12 @@ int data_e_valida(Data *data)
     return 1;
 }
 
-int data_e_ano_bissexto(Data *data)
+int eAnoBissextoData(Data *data)
 {
     return data->ano % 4 == 0 || (data->ano % 100 == 0 && data->ano % 400 == 0);
 }
 
-int data_anos_diferenca(Data *dataInicio, Data *dataFim)
+int getAnosDiferencaData(Data *dataInicio, Data *dataFim)
 {
     int years = dataFim->ano - dataInicio->ano;
 
@@ -97,7 +97,7 @@ int data_anos_diferenca(Data *dataInicio, Data *dataFim)
     return years;
 }
 
-int data_comparar(void *pData1, void *pData2)
+int compararDatas(void *pData1, void *pData2)
 {
     Data *date1 = *(Data **)pData1;
     Data *date2 = *(Data **)pData2;
@@ -123,7 +123,7 @@ int data_comparar(void *pData1, void *pData2)
     return 0;
 }
 
-void data_free(Data *date)
+void liberarData(Data *date)
 {
     assert(date);
     free(date);

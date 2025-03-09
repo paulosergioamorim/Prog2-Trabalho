@@ -4,12 +4,12 @@
 int main(int argc, char const *argv[])
 {
     Gerencia gerencia = criarGerencia();
-    char option = 0;
+    char opcao = 0;
 
-    while (option != 'F')
+    while (opcao != 'F')
     {
-        scanf("%c%*c", &option);
-        handleOption(gerencia, option);
+        scanf("%c%*c", &opcao);
+        realizarGerencia(gerencia, opcao);
     }
 
     liberarGerencia(gerencia);
