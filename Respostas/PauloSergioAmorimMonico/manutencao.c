@@ -85,7 +85,6 @@ void setSetor(Manutencao *manutencao, char *setor)
 int getTempoEstimadoManutencao(void *dado)
 {
     Manutencao *manutencao = (Manutencao *)dado;
-    setTempoEstimadoManutencao(manutencao);
 
     return manutencao->tempoEstimado;
 }
@@ -106,7 +105,6 @@ char getTipoManutencao()
 void desalocaManutencao(void *s)
 {
     free(s);
-    s = NULL;
 }
 
 /**

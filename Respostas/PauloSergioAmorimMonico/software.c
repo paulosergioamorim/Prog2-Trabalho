@@ -9,7 +9,6 @@ struct Software
     char categoria[MAX_TAM_CAT];
     int impacto;
     char motivo[MAX_TAM_MOTIVO];
-
     int tempoEstimado;
 };
 
@@ -83,7 +82,6 @@ void setTempoEstimadoSoftware(Software *s)
 int getTempoEstimadoSoftware(void *dado)
 {
     Software *software = (Software *)dado;
-    setTempoEstimadoSoftware(software);
 
     return software->tempoEstimado;
 }
@@ -104,7 +102,6 @@ char getTipoSoftware()
 void desalocaSoftware(void *s)
 {
     free(s);
-    s = NULL;
 }
 
 /**

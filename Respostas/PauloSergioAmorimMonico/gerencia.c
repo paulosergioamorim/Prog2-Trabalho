@@ -43,7 +43,8 @@ void realizarGerencia(Gerencia gerencia, const char opcao)
         char comando[sizeof("RANKING TECNICOS")] = "";
         scanf("%[^\n]%*c", comando);
 
-        if (strcmp(comando, "TECNICOS") == 0) {
+        if (strcmp(comando, "TECNICOS") == 0)
+        {
             printf("----- BANCO DE TECNICOS -----\n");
             Tecnicos_print(gerencia->tecnicos);
             printf("----------------------------\n\n");
@@ -58,7 +59,8 @@ void realizarGerencia(Gerencia gerencia, const char opcao)
             Tecnicos_free_only_buffer(sortedList);
         }
 
-        if (strcmp(comando, "USUARIOS") == 0) {
+        if (strcmp(comando, "USUARIOS") == 0)
+        {
             printf("----- BANCO DE USUARIOS -----\n");
             Usuarios_print(gerencia->usuarios);
             printf("----------------------------\n\n");
@@ -163,7 +165,6 @@ void realizarGerencia(Gerencia gerencia, const char opcao)
         if (strcmp(tipoTicket, "MANUTENCAO") == 0)
         {
             Manutencao *manutecao = lerManutencao();
-            setTempoEstimadoManutencao(manutecao);
 
             if (!solicitante)
             {
@@ -175,12 +176,12 @@ void realizarGerencia(Gerencia gerencia, const char opcao)
 
             insereTicketFila(gerencia->tickets, cpfSol, manutecao, getTempoEstimadoManutencao, getTipoManutencao,
                              notificaManutencao, desalocaManutencao);
+            setTempoEstimadoManutencao(manutecao);
         }
 
         else if (strcmp(tipoTicket, "SOFTWARE") == 0)
         {
             Software *software = lerSoftware();
-            setTempoEstimadoSoftware(software);
 
             if (!solicitante)
             {
@@ -190,6 +191,7 @@ void realizarGerencia(Gerencia gerencia, const char opcao)
 
             insereTicketFila(gerencia->tickets, cpfSol, software, getTempoEstimadoSoftware, getTipoSoftware,
                              notificaSoftware, desalocaSoftware);
+            setTempoEstimadoSoftware(software);
         }
 
         else if (strcmp(tipoTicket, "OUTROS") == 0)
@@ -204,6 +206,7 @@ void realizarGerencia(Gerencia gerencia, const char opcao)
 
             insereTicketFila(gerencia->tickets, cpfSol, outros, getTempoEstimadoOutros, getTipoOutros, notificaOutros,
                              desalocaOutros);
+            setTempoEstimadoOutros(outros);
         }
 
         addSolicitacaoUsuario(solicitante);
@@ -216,7 +219,6 @@ void liberarGerencia(Gerencia gerencia)
     Tecnicos_free(gerencia->tecnicos);
     Usuarios_free(gerencia->usuarios);
     free(gerencia);
-    gerencia = NULL;
 }
 
 void imprimirRelatorioGeral(Gerencia gerencia)

@@ -66,7 +66,6 @@ void setTempoEstimadoOutros(Outros *outros)
 int getTempoEstimadoOutros(void *dado)
 {
     Outros *outros = (Outros *)dado;
-    setTempoEstimadoOutros(outros);
 
     return outros->tempoEstimado;
 }
@@ -87,7 +86,6 @@ char getTipoOutros()
 void desalocaOutros(void *s)
 {
     free(s);
-    s = NULL;
 }
 
 /**

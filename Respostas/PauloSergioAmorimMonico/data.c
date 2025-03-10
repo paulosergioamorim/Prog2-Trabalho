@@ -1,5 +1,4 @@
 #include "data.h"
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -13,7 +12,6 @@ struct data
 Data *criarData(int dia, int mes, int ano)
 {
     Data *pData = malloc(sizeof(struct data));
-    assert(pData);
 
     pData->dia = dia;
     pData->mes = mes;
@@ -125,6 +123,5 @@ int compararDatas(void *pData1, void *pData2)
 
 void liberarData(Data *date)
 {
-    assert(date);
     free(date);
 }

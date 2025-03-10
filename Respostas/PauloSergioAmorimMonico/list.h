@@ -61,14 +61,12 @@
                                                                                                                        \
         free(list->buffer);                                                                                            \
         free(list);                                                                                                    \
-        list = NULL;                                                                                                   \
     }                                                                                                                  \
                                                                                                                        \
     void T##s_free_only_buffer(T##s list)                                                                              \
     {                                                                                                                  \
         free(list->buffer);                                                                                            \
         free(list);                                                                                                    \
-        list = NULL;                                                                                                   \
     }                                                                                                                  \
                                                                                                                        \
     T T##s_get(T##s list, int i)                                                                                       \

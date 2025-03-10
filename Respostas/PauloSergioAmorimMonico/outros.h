@@ -1,4 +1,3 @@
-
 #pragma once
 
 #define OUTROS_DESCRICAO 500

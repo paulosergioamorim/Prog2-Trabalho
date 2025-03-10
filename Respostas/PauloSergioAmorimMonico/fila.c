@@ -6,7 +6,7 @@
 
 struct Fila
 {
-    Ticket **tickets;
+    Ticket **buffer;
     int size;
     int count;
 };
@@ -19,7 +19,7 @@ Fila *criaFila()
 {
     Fila *fila = malloc(sizeof(Fila));
 
-    fila->tickets = malloc(TAM_INICIAL * sizeof(Ticket *));
+    fila->buffer = malloc(TAM_INICIAL * sizeof(Ticket *));
     fila->size = TAM_INICIAL;
     fila->count = 0;
 
@@ -34,11 +34,10 @@ Fila *criaFila()
 void desalocaFila(Fila *f)
 {
     for (int i = 0; i < f->count; i++)
-        desalocaTicket(f->tickets[i]);
+        desalocaTicket(f->buffer[i]);
 
-    free(f->tickets);
+    free(f->buffer);
     free(f);
-    f = NULL;
 }
 
 /**
@@ -58,14 +57,14 @@ void insereTicketFila(Fila *f, char *cpfSol, void *dado, func_ptr_tempoEstimado 
     if (f->count == f->size)
     {
         f->size *= 2;
-        f->tickets = realloc(f->tickets, f->size * sizeof(Ticket *));
+        f->buffer = realloc(f->buffer, f->size * sizeof(Ticket *));
     }
 
     Ticket *ticket = criaTicket(cpfSol, dado, getTempo, getTipo, notifica, desaloca);
     char id[20] = "";
     sprintf(id, "Tick-%d", f->count + 1);
     setIDTicket(ticket, id);
-    f->tickets[f->count] = ticket;
+    f->buffer[f->count] = ticket;
     f->count++;
 }
 
@@ -90,7 +89,7 @@ int getQtdTicketsPorStatusNaFila(Fila *f, char status)
     int count = 0;
 
     for (int i = 0; i < f->count; i++)
-        if (getStatusTicket(f->tickets[i]) == status)
+        if (getStatusTicket(f->buffer[i]) == status)
             count++;
 
     return count;
@@ -106,7 +105,7 @@ Ticket *getTicketNaFila(Fila *f, int i) {
     if (i < 0 || i >= f->count)
         return NULL;
     
-    return f->tickets[i];
+    return f->buffer[i];
 }
 
 /**
@@ -115,5 +114,5 @@ Ticket *getTicketNaFila(Fila *f, int i) {
  */
 void notificaFila(Fila *f) {
     for (int i = 0; i < f->count; i++)
-        notificaTicket(f->tickets[i]);
+        notificaTicket(f->buffer[i]);
 }

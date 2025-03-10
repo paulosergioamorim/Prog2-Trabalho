@@ -12,7 +12,6 @@ struct Ticket
     func_ptr_tipo getTipo;
     func_ptr_notifica notifica;
     func_ptr_desaloca desaloca;
-
     int finalizado;
 };
 
@@ -112,7 +111,6 @@ void desalocaTicket(Ticket *doc)
 {
     doc->desaloca(doc->dado);
     free(doc);
-    doc = NULL;
 }
 
 /**
