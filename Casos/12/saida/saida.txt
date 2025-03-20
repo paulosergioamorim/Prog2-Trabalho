@@ -1,0 +1,73 @@
+----- RANKING DE TECNICOS -----
+--------------------
+- Nome: JAYCE BARBOSA
+- CPF: 854.632.894-20
+- Data de Nascimento: 22/2/1990
+- Telefone: (37)9938-3382
+- Genero: MASCULINO
+- Area de Atuacao: GERAL
+- Salario: 2000.00
+- Disponibilidade: 7h
+- Tempo Trabalhado: 0h
+-------------------------------
+
+----- FILA DE TICKETS -----
+---------TICKET-----------
+- ID: Tick-1
+- Usuario solicitante: 255.942.213-22
+- Tipo: Software
+- Nome do software: SISTEMA DE PONTO
+- Categoria: BUG
+- Nível do impacto: 5
+- Motivo: SISTEMA DE PONTO MOSTRANDO A HORA ERRADA
+- Tempo estimado: 8h
+- Status: Aberto
+-------------------------
+
+---------TICKET-----------
+- ID: Tick-2
+- Usuario solicitante: 255.942.213-22
+- Tipo: Software
+- Nome do software: OUTLOOK
+- Categoria: BUG
+- Nível do impacto: 4
+- Motivo: EMAILS NAO ESTAO SENDO ENVIADOS
+- Tempo estimado: 7h
+- Status: Aberto
+-------------------------
+
+---------TICKET-----------
+- ID: Tick-3
+- Usuario solicitante: 351.574.251-43
+- Tipo: Outros
+- Descricao: TODAS AS LAMPADAS DO SETOR QUEIMARAM
+- Local: SALA 38
+- Nivel de Dificuldade: 10
+- Tempo Estimado: 10h
+- Status: Aberto
+-------------------------
+
+---------TICKET-----------
+- ID: Tick-4
+- Usuario solicitante: 351.574.251-43
+- Tipo: Outros
+- Descricao: DISJUNTOR PAROU DE FUNCIONAR
+- Local: SALA 38
+- Nivel de Dificuldade: 10
+- Tempo Estimado: 10h
+- Status: Aberto
+-------------------------
+
+---------TICKET-----------
+- ID: Tick-5
+- Usuario solicitante: 351.574.251-43
+- Tipo: Outros
+- Descricao: CONE DO ESTACIONAMENTO SUMIU
+- Local: ESTACIONAMENTO
+- Nivel de Dificuldade: 10
+- Tempo Estimado: 10h
+- Status: Aberto
+-------------------------
+
+---------------------------
+
